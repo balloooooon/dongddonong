@@ -40,7 +40,8 @@ def test():
     return "test"
 
 
-@app.route('/ai/analysis/{ID}', methods=['POST'])
+# @app.route('/ai/analysis/{ID}', methods=['POST'])
+@app.route('/ai/analysis/<int:ID>', methods=['POST'])
 def analyze_video(ID):
     spring_url = 'https://j9e103.p.ssafy.io:8589/game'
     try:
