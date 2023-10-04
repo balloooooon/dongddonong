@@ -45,6 +45,9 @@ def analyze_video(ID):
     try:
         # Lambda 함수로부터 전달된 동영상 데이터 받기
         video_data = request.data
+        app.logger.info(request.data)
+        app.logger.info(video_data)
+
         result = basketball.detect(video_data, ID)
         print(result)
 
