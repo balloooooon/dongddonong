@@ -45,27 +45,28 @@ def analyze_video(ID):
     spring_url = 'https://j9e103.p.ssafy.io:8589/game'
     try:
         # Lambda 함수로부터 전달된 동영상 데이터 받기
-        # video_data = request.data
-        video_data = request.files['file']
- 
-        result = basketball.detect(video_data, ID)
-        print(result)
+        video_data = request.data
+        print(video_data)
+        # video_data = request.files['file']
 
-        # 동영상 데이터를 메모리에서 읽기
-        # nparr = np.fromstring(video_data, np.uint8)
-        # video_frame = cv2.imdecode(nparr, cv2.IMREAD_COLOR)
+        # result = basketball.detect(video_data, ID)
+        # print(result)
 
-        # 분석 결과 반환
-        # highlight = highlight_video(result, video_data)
-        try:
-            response = requests.patch(spring_url, json=result)
+        # # 동영상 데이터를 메모리에서 읽기
+        # # nparr = np.fromstring(video_data, np.uint8)
+        # # video_frame = cv2.imdecode(nparr, cv2.IMREAD_COLOR)
 
-            # 응답 확인
-            if response.status_code == 200:
-                result = response.json()
-                print("Analysis Result:", result['result'])
-            else:
-                print("Error:", response.status_code, response.text)
+        # # 분석 결과 반환
+        # # highlight = highlight_video(result, video_data)
+        # try:
+        #     response = requests.patch(spring_url, json=result)
+
+        #     # 응답 확인
+        #     if response.status_code == 200:
+        #         result = response.json()
+        #         print("Analysis Result:", result['result'])
+        #     else:
+        #         print("Error:", response.status_code, response.text)
 
         except Exception as e:
             print("Error:", str(e))
