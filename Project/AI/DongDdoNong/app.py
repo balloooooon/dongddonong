@@ -6,6 +6,7 @@ sys.path.append(NOW_DIR + '/deepsort')
 
 from flask import Flask, request, jsonify, send_file, redirect
 import requests
+import json
 
 import boto3
 # import opencv
@@ -53,8 +54,7 @@ def analyze_video(ID):
         # 분석 결과 반환
         # highlight = highlight_video(result, video_data)
         try:
-            # Spring Boot 서버로 POST 요청을 보냅니다.
-            response = requests.post(spring_url, jsonify({'result': result}))
+            response = requests.patch(spring_url, json=result)
 
             # 응답 확인
             if response.status_code == 200:
