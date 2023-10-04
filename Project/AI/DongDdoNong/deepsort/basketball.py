@@ -30,6 +30,10 @@ import itertools
 
 import numpy as np
 
+model_path = 'before_basketball.pt'
+model = torch.load(model_path)
+model.eval()
+
 palette = (2 ** 11 - 1, 2 ** 15 - 1, 2 ** 20 - 1)
 data_deque = {}
 
@@ -211,7 +215,7 @@ def detect(video, ID):
 
                 outputs = deepsort.update(xywhs, confss, oids, im0)
 
-                if len(outputs) > 0:
+                if len(outputs) > 0 and ball_data:
                     bbox_xyxy = outputs[:, :4]
                     identities = outputs[:, -2]
                     object_id = outputs[:, -1]

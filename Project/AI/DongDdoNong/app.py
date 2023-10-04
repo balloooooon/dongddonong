@@ -41,7 +41,7 @@ def test():
 
 @app.route('/ai/analysis/{ID}', methods=['POST'])
 def analyze_video(ID):
-    spring_url = f'https://j9e103.p.ssafy.io:8589/game'
+    spring_url = 'https://j9e103.p.ssafy.io:8589/game'
     try:
         # Lambda 함수로부터 전달된 동영상 데이터 받기
         video_data = request.data
