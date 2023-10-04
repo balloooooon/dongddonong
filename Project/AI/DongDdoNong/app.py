@@ -36,6 +36,8 @@ s3 = boto3.client(
 
 @app.route('/ai')
 def test():
+    print("test")
+    app.logger.info("add")
     return "test"
 
 
