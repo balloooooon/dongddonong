@@ -46,6 +46,7 @@ def analyze_video(ID):
         # Lambda 함수로부터 전달된 동영상 데이터 받기
         video_data = request.data
         result = basketball.detect(video_data, ID)
+        print(result)
 
         # 동영상 데이터를 메모리에서 읽기
         # nparr = np.fromstring(video_data, np.uint8)
