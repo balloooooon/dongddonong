@@ -46,8 +46,11 @@ def analyze_video(ID):
     spring_url = 'https://j9e103.p.ssafy.io:8589/game'
     try:
         # Lambda 함수로부터 전달된 동영상 데이터 받기
-        # video_data = request.data
-        video_data = request.files['file']
+        video_data = request.data
+
+        print("analysis")
+
+        # video_data = request.files['file']
         print(video_data)
 
         # result = basketball.detect(video_data, ID)
