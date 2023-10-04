@@ -32,8 +32,9 @@ import itertools
 import numpy as np
 
 model_path = '/app/deepsort/before_basketball.pt'
+# model_path = 'C:/Users/SSAFY/Desktop/특화PJT/S09P22E103/Project/AI/DongDdoNong/deepsort/before_basketball.pt'
 model = torch.load(model_path)
-model.eval()
+# model.eval()
 
 palette = (2 ** 11 - 1, 2 ** 15 - 1, 2 ** 20 - 1)
 data_deque = {}
