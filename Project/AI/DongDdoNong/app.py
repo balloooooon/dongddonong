@@ -37,7 +37,6 @@ s3 = boto3.client(
 @app.route('/ai')
 def test():
     print("test")
-    app.logger.info("add")
     return "test"
 
 
@@ -47,8 +46,8 @@ def analyze_video(ID):
     try:
         # Lambda 함수로부터 전달된 동영상 데이터 받기
         video_data = request.data
-        app.logger.info(request.data)
-        app.logger.info(video_data)
+        print(request.data)
+        print(video_data)
 
         result = basketball.detect(video_data, ID)
         print(result)
