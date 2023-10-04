@@ -45,9 +45,9 @@ def analyze_video(ID):
     spring_url = 'https://j9e103.p.ssafy.io:8589/game'
     try:
         # Lambda 함수로부터 전달된 동영상 데이터 받기
-        video_data = request.data
+        # video_data = request.data
+        video_data = request.files['file']
         print(video_data)
-        # video_data = request.files['file']
 
         # result = basketball.detect(video_data, ID)
         # print(result)
@@ -68,8 +68,8 @@ def analyze_video(ID):
         #     else:
         #         print("Error:", response.status_code, response.text)
 
-        except Exception as e:
-            print("Error:", str(e))
+        # except Exception as e:
+        #     print("Error:", str(e))
 
         return jsonify({'result': result}), 200
     except Exception as e:
