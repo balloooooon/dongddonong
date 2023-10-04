@@ -5,6 +5,7 @@ sys.path.append(NOW_DIR + '/utils')
 sys.path.append(NOW_DIR + '/models')
 sys.path.append(NOW_DIR + '/pose')
 sys.path.append(NOW_DIR + '/deep_sort_pytorch')
+sys.path.append(NOW_DIR)
 from pose.pose_estimation import pose
 from deep_sort_pytorch.utils.parser import get_config
 from deep_sort_pytorch.deep_sort import DeepSort
