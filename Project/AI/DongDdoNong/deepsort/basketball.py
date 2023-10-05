@@ -156,6 +156,10 @@ def detect(video, ID):
 
     print(5)
 
+    vct = cv2.VideoCapture(video)
+    frame = video_capture.read()
+    print("frame", frame)
+
     model = attempt_load(weights, map_location=device)
     stride = int(model.stride.max())
 
