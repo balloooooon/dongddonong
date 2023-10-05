@@ -47,8 +47,8 @@ def analyze_video(ID):
 
         print("analysis")
 
-        # video_data = request.files['file']
-        video_data = request.json.get("video_data")
+        video_data = request.files['file']
+        # video_data = request.json.get("video_data")
         print(video_data)
         result = basketball.detect(video_data, ID)
 
