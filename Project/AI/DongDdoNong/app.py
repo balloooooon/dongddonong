@@ -76,7 +76,7 @@ def analyze_video(file_name):
         # highlight = highlight_video(result, video_data)
         try:
             headers = {"Content-Type": "application/json"}
-            response = requests.patch(spring_url, json.dumps(result), headers=headers)
+            response = requests.patch(spring_url, json=json.dumps(result), headers=headers)
 
             if response.status_code == 200:
                 result = response.json()
@@ -85,7 +85,7 @@ def analyze_video(file_name):
                 print("Error:", response.status_code, response.text)
 
         except Exception as e:
-            print("Error:", str(e))
+            print("Error:", e)
 
         return jsonify({'result': result}), 200
     except Exception as e:
