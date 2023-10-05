@@ -124,7 +124,7 @@ def detect(video, ID):
 
     print(2)
 
-    names, source, weights, view_img, save_txt, imgsz, trace = opt.names, video.name, opt.weights, opt.view_img, opt.save_txt, opt.img_size, not opt.no_trace
+    names, source, weights, view_img, save_txt, imgsz, trace = opt.names, video.filename, opt.weights, opt.view_img, opt.save_txt, opt.img_size, not opt.no_trace
     # save_img = not opt.nosave and not source.endswith('.txt')
     # webcam = source.isnumeric() or source.endswith('.txt') or source.lower().startswith(
     #     ('rtsp://', 'rtmp://', 'http://', 'https://'))
