@@ -70,13 +70,13 @@ def analyze_video(file_name):
         for player_history in result["playerHistories"]:
             del player_history["goalTime"]
 
-        print("json.dumps(result) : ", json.dumps(result))
+        # print("json.dumps(result) : ", json.dumps(result))
 
 
         # highlight = highlight_video(result, video_data)
         try:
             headers = {"Content-Type": "application/json"}
-            response = requests.patch(spring_url, json=json.dumps(result), headers=headers)
+            response = requests.patch(spring_url, data=result, headers=headers)
 
             if response.status_code == 200:
                 result = response.json()
