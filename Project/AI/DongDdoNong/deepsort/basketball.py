@@ -327,10 +327,12 @@ def detect(video, ID):
                             players[close_id].ball_time_plus()
 
                     if not shot_try_done and shot_goal_done and shot_id != -1:
-                        if shot_count < 6:
-                            if distance > last_distance:
-                                shot_count += 1
+                        if shot_count < 3:
+                            if distance >= last_distance:
+                                shot_count+=1
                                 last_distance = distance
+                            else:
+                                shot_count = 0
 
                         else:
                             shot_try_done = True
@@ -546,7 +548,11 @@ def calculate_distance(person_bbox, ball_bbox):
     person_x, person_y = person_bbox[0] + person_bbox[2] / 2, person_bbox[1] + person_bbox[3] / 2
     ball_x, ball_y = ball_bbox[0] + ball_bbox[2] / 2, ball_bbox[1] + ball_bbox[3] / 2
 
-    distance = abs(person_x - ball_x)
+    distance_x = abs(person_x - ball_x)
+    distance_y = abs(person_y - ball_y)
+
+    # 유클리드 거리 계산
+    distance = math.sqrt(distance_x ** 2 + distance_y ** 2)
 
     return distance
 
