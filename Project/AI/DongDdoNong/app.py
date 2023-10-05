@@ -45,7 +45,7 @@ def analyze_video(ID):
     spring_url = 'https://j9e103.p.ssafy.io:8589/game'
     try:
 
-        print("analysis")
+        print("analysis") 
 
         video_data = request.files['file']
         # video_data = request.json.get("video_data")
