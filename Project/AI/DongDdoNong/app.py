@@ -75,7 +75,8 @@ def analyze_video(file_name):
 
         # highlight = highlight_video(result, video_data)
         try:
-            response = requests.patch(spring_url, json.dumps(result))
+            headers = {"Content-Type": "application/json"}
+            response = requests.patch(spring_url, json.dumps(result), headers=headers)
 
             if response.status_code == 200:
                 result = response.json()
