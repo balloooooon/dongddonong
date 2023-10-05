@@ -55,24 +55,21 @@ def analyze_video(file_name):
         s3.download_file(bucket_name, object_key, video_path)
         ID = file_name.split('_')[0]
 
-        # print("request : ", request)
-        # request_data = request.form['data']
-        # print(request_data)
-
-        # bucket_name = request_data.get('bucket_name')
-        # object_key = request_data.get('object_key')
-        # print(bucket_name)
-        # print(object_key)
-
-        # video_path = object_key
-
         video_data = open(video_path, 'r', encoding='UTF-8')
         result = basketball.detect(video_data, ID)
+        print("result : ", result)
 
-        # video_data = request.files['file']
-        # video_data = request.json.get("video_data")
-        # print("video_data : ", video_data)
-        
+        for player_history in result["playerHistories"]:
+            if "goalTime" in player_history:
+                goalTime = player_history["goalTime"]
+                print("goalTime : ", goalTime)
+                # 여기에 하이라이트 함수 넣으면 됨
+                # highlight_video(goalTime, video_data)
+
+        # goalTile 지우기
+        for player_history in result["playerHistories"]:
+            del player_history["goalTime"]
+
         print("json.dumps(result) : ", json.dumps(result))
 
 

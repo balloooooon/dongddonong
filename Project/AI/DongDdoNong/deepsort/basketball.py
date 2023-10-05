@@ -197,10 +197,10 @@ def detect(video, ID):
     old_img_b = 1
 
     t0 = time.time()
-    print(11)
+
     for idx, (path, img, im0s, vid_cap) in enumerate(dataset):
         temp = copy.deepcopy(im0s)
-        print(12)
+
         img = torch.from_numpy(img).to(device)
         img = img.half() if half else img.float()
         img /= 255.0
@@ -208,7 +208,7 @@ def detect(video, ID):
             img = img.unsqueeze(0)
 
         image_height, image_width, _ = im0s.shape
-        print(13)
+
         if device.type != 'cpu' and (
                 old_img_b != img.shape[0] or old_img_h != img.shape[2] or old_img_w != img.shape[3]):
             old_img_b = img.shape[0]
@@ -216,14 +216,14 @@ def detect(video, ID):
             old_img_w = img.shape[3]
             for i in range(3):
                 model(img, augment=opt.augment)[0]
-        print(14)
+
         t1 = time_synchronized()
         with torch.no_grad():
             pred = model(img, augment=opt.augment)[0]
         t2 = time_synchronized()
         pred = non_max_suppression(pred, opt.conf_thres, opt.iou_thres, classes=opt.classes, agnostic=opt.agnostic_nms)
         t3 = time_synchronized()
-        print(15)
+
         for i, det in enumerate(pred):
             if webcam:
                 p, s, im0, frame = path[i], '%g: ' % i, im0s[i].copy(), dataset.count
@@ -233,7 +233,7 @@ def detect(video, ID):
             p = Path(p)
             # save_path = str(save_dir / p.name)
             # gn = torch.tensor(im0.shape)[[1, 0, 1, 0]]
-            print(16)
+
             if len(det):
                 det[:, :4] = scale_coords(img.shape[2:], det[:, :4], im0.shape).round()
 
@@ -244,14 +244,14 @@ def detect(video, ID):
                 xywh_bboxs = []
                 confs = []
                 oids = []
-                print(17)
+
                 for *xyxy, conf, cls in reversed(det):
                     x_c, y_c, bbox_w, bbox_h = xyxy_to_xywh(*xyxy)
                     xywh_obj = [x_c, y_c, bbox_w, bbox_h]
                     xywh_bboxs.append(xywh_obj)
                     confs.append([conf.item()])
                     oids.append(int(cls))
-                    print(18)
+
                     if int(cls) == 2:
                         ball_data = xywh_obj[0], xywh_obj[1], xywh_obj[0] + xywh_obj[2], xywh_obj[1] + xywh_obj[3]
                         plot_one_box(xyxy, im0, label="ball", color=colors[int(cls)], line_thickness=1)
@@ -260,12 +260,12 @@ def detect(video, ID):
                     if save_img or view_img:
                         label = f'{names[int(cls)]} {conf:.2f}'
                         plot_one_box(xyxy, im0, label=label, color=colors[int(cls)], line_thickness=1)
-                print(19)
+
                 xywhs = torch.Tensor(xywh_bboxs)
                 confss = torch.Tensor(confs)
 
                 outputs = deepsort.update(xywhs, confss, oids, im0)
-                print(20)
+
                 if len(outputs) > 0 and ball_data:
                     bbox_xyxy = outputs[:, :4]
                     identities = outputs[:, -2]
@@ -277,7 +277,7 @@ def detect(video, ID):
 
                     if len(person_data)==0:
                         continue
-                    print(22)
+
                     for now in person_data:
                         x1, y1, x2, y2, id = now[0], now[1], now[2], now[3], now[4]
                         person_width = (x2 - x1) / 2
@@ -286,7 +286,7 @@ def detect(video, ID):
                         crop = temp[y1:y2, x1:x2]
                         crop_data = np.array(crop, dtype=np.uint8)
                         crop_image = Image.fromarray(crop_data)
-                        print(23)
+
                         if id not in players or idx % 15 == 0:
                             save_image = cv2.cvtColor(crop_data, cv2.COLOR_BGR2RGB)
                             folder_path = "pose/exp/" + str(id)
@@ -295,12 +295,12 @@ def detect(video, ID):
                             cv2.imwrite("pose/exp/" + str(id) + "/" +
                                         str(len(os.listdir(f"pose/exp/{id}"))) + ".jpg",
                                         cv2.cvtColor(save_image, cv2.COLOR_RGB2BGR))
-                        print(24)
+
                         if id not in players:
                             players[id] = Player(id)
 
                             players_data[id] = crop_data
-                    print(25)
+
                     close_person, distance = close_person_find(person_data, ball_data)
 
                     x1, y1, x2, y2, close_id = person_data[close_person][0], person_data[close_person][1], \
@@ -313,13 +313,13 @@ def detect(video, ID):
                     crop_image = Image.fromarray(crop_data)
 
                     crop_image.save("pose/crop_image.jpg")
-                    print(26)
+
                     result_pose = pose(idx, close_id)
                     if result_pose == 3:
                         shot_ing = True
                         shot_id = close_id
                         shot_where = 2
-                    print(27)
+
                     if not shot_try_done and shot_goal_done and shot_id != -1:
                         players[shot_id].ball_time_plus()
                     else:
@@ -429,7 +429,7 @@ def detect(video, ID):
     #         players[object1].ballTime += players[object2].ballTime
     #         del players[object2]
 
-    print("result 전까지 왔다.")
+
     result = {
         "id": ID,
         "playerHistories": []
