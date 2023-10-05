@@ -47,6 +47,7 @@ def analyze_video(ID):
 
         print("analysis")
 
+        print("request : ", request)
         request_data = request.form['data']
         print(request_data)
 
