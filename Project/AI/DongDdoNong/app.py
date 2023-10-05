@@ -47,7 +47,8 @@ def analyze_video(ID):
 
         print("analysis")
 
-        request_data = request.json  # JSON 데이터를 파싱해서 가져옴
+        request_data = request.data
+        print(request_data)
 
         bucket_name = request_data.get('bucket_name')
         object_key = request_data.get('object_key')
