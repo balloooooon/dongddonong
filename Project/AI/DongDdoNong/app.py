@@ -116,7 +116,7 @@ def analyze_video(file_name):
         #         print("goalTime : ", goalTime)
         #         여기에 하이라이트 함수 넣으면 됨
         #         # highlight_video(goalTime, video_data)
-        주석 해제 해야함
+        # 주석 해제 해야함
         result = highlight_video(ID, result, video_path)
         
 
