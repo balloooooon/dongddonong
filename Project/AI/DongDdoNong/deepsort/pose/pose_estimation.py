@@ -55,6 +55,7 @@ def pose(num, id):
 
     # 포즈 모델 가져오기
     # base_options = python.BaseOptions(model_asset_path=model_path)
+    base_options = python.BaseOptions(model_asset_buffer=model)
     options = vision.PoseLandmarkerOptions(
         base_options=base_options,
         output_segmentation_masks=True)
