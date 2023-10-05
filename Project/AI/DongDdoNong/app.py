@@ -45,12 +45,25 @@ def analyze_video(ID):
     spring_url = 'https://j9e103.p.ssafy.io:8589/game'
     try:
 
-        print("analysis") 
+        print("analysis")
 
-        video_data = request.files['file']
+        request_data = request.json  # JSON 데이터를 파싱해서 가져옴
+
+        bucket_name = request_data.get('bucket_name')
+        object_key = request_data.get('object_key')
+        print(bucket_name)
+        print(object_key)
+
+        video_path = object_key
+
+        s3 = boto3.client('s3')
+        s3.download_file(bucket_name, object_key, video_path)
+
+
+        # video_data = request.files['file']
         # video_data = request.json.get("video_data")
-        print("video_data : ", video_data)
-        result = basketball.detect(video_data, ID)
+        # print("video_data : ", video_data)
+        result = basketball.detect(video_path, ID)
         print("json.dumps(result) : ", json.dumps(result))
 
 
