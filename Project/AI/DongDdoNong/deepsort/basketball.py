@@ -123,7 +123,7 @@ def detect(video, ID):
 
     print(2)
 
-    names, source, weights, view_img, save_txt, imgsz, trace = opt.names, video, opt.weights, opt.view_img, opt.save_txt, opt.img_size, not opt.no_trace
+    names, source, weights, view_img, save_txt, imgsz, trace = opt.names, video.name, opt.weights, opt.view_img, opt.save_txt, opt.img_size, not opt.no_trace
     # save_img = not opt.nosave and not source.endswith('.txt')
     # webcam = source.isnumeric() or source.endswith('.txt') or source.lower().startswith(
     #     ('rtsp://', 'rtmp://', 'http://', 'https://'))
@@ -162,17 +162,20 @@ def detect(video, ID):
 
     if trace:
         model = TracedModel(model, device, opt.img_size)
-
+    print("6-2")
     if half:
         model.half()
-
+    print("6-3")
+    print("source : ", source)
     vid_path, vid_writer = None, None
     if webcam:
         view_img = check_imshow()
         cudnn.benchmark = True
         dataset = LoadStreams(source, img_size=imgsz, stride=stride)
     else:
+        print("6-4")
         dataset = LoadImages(source, img_size=imgsz, stride=stride)
+    print("6-5")
 
     print(7)
     
