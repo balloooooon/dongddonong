@@ -55,7 +55,7 @@ def highlight_video(ID, result, video_path):
         for frame in player_history['goalTime']:
             print(11)
             start_time = max(frame/60 - highlight_duration, 0)
-            end_time = min(frame/60 + highlight_duration, 5)
+            end_time = min(frame//60 + highlight_duration, 5)
 
             print("start_time : ", start_time)
             print("end_time : ", end_time)
@@ -66,6 +66,7 @@ def highlight_video(ID, result, video_path):
 
             # 하이라이트 동영상 저장
             output_file = f'highlight_{frame}.mp4'
+            print(20)
             highlight_clip.write_videofile(output_file, codec='libx264')
             print(13)
 
