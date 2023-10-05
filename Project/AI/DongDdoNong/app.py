@@ -54,8 +54,8 @@ def highlight_video(ID, result, video_path):
     for player_history in result["playerHistories"]:
         for frame in player_history['goalTime']:
             print(11)
-            start_time = max(frame - highlight_duration, 0)
-            end_time = min(frame + highlight_duration, player_history['playTime'])
+            start_time = max(frame/60 - highlight_duration, 0)
+            end_time = min(frame/60 + highlight_duration, 5)
 
             print("start_time : ", start_time)
             print("end_time : ", end_time)
