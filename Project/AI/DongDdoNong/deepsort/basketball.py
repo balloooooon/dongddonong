@@ -97,6 +97,7 @@ def detect(video, ID):
     opt = parser.parse_args()
 
     print(1)
+    print(video)
 
     shot_try_done = False
     shot_goal_try = False
