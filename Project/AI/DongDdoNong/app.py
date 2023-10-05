@@ -40,32 +40,39 @@ def test():
     return "test"
 
 
-@app.route('/ai/analysis/<int:ID>', methods=['POST'])
-def analyze_video(ID):
+# @app.route('/ai/analysis/<int:ID>', methods=['POST'])
+# def analyze_video(ID):
+@app.route('/ai/analysis/<file_name>', methods=['POST'])
+def analyze_video(file_name):
     spring_url = 'https://j9e103.p.ssafy.io:8589/game'
     try:
 
         print("analysis")
 
-        print("request : ", request)
-        request_data = request.form['data']
-        print(request_data)
-
-        bucket_name = request_data.get('bucket_name')
-        object_key = request_data.get('object_key')
-        print(bucket_name)
-        print(object_key)
-
-        video_path = object_key
-
-        s3 = boto3.client('s3')
+        bucket_name = "dongddonong"
+        object_key = "video/" + file_name
+        video_path = f"./temp/{file_name}"
         s3.download_file(bucket_name, object_key, video_path)
+        ID = file_name.split('_')[0]
 
+        # print("request : ", request)
+        # request_data = request.form['data']
+        # print(request_data)
+
+        # bucket_name = request_data.get('bucket_name')
+        # object_key = request_data.get('object_key')
+        # print(bucket_name)
+        # print(object_key)
+
+        # video_path = object_key
+
+        video_data = open(video_path, 'r', encoding='UTF-8')
+        result = basketball.detect(video_data, ID)
 
         # video_data = request.files['file']
         # video_data = request.json.get("video_data")
         # print("video_data : ", video_data)
-        result = basketball.detect(video_path, ID)
+        
         print("json.dumps(result) : ", json.dumps(result))
 
 
