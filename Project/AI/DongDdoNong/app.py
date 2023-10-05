@@ -5,7 +5,7 @@ sys.path.append(NOW_DIR + '/deepsort')
 
 
 from flask import Flask, request, jsonify, send_file, redirect
-import requests
+import requests 
 import json
 
 import boto3
