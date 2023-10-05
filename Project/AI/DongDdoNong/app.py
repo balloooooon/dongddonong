@@ -49,22 +49,23 @@ def analyze_video(ID):
 
         video_data = request.files['file']
         # video_data = request.json.get("video_data")
-        print(video_data)
+        print("video_data : ", video_data)
         result = basketball.detect(video_data, ID)
+        print("json.dumps(result) : ", json.dumps(result))
 
 
-        # # highlight = highlight_video(result, video_data)
-        # try:
-        #     response = requests.patch(spring_url, json.dumps(result))
+        # highlight = highlight_video(result, video_data)
+        try:
+            response = requests.patch(spring_url, json.dumps(result))
 
-        #     if response.status_code == 200:
-        #         result = response.json()
-        #         print("Analysis Result:", result['result'])
-        #     else:
-        #         print("Error:", response.status_code, response.text)
+            if response.status_code == 200:
+                result = response.json()
+                print("Analysis Result:", result['result'])
+            else:
+                print("Error:", response.status_code, response.text)
 
-        # except Exception as e:
-        #     print("Error:", str(e))
+        except Exception as e:
+            print("Error:", str(e))
 
         return jsonify({'result': result}), 200
     except Exception as e:
