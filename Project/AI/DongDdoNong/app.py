@@ -51,7 +51,7 @@ def highlight_video(ID, result, video_path):
     highlight_duration = 2  # 2초
     clips = []
 
-    for player_history in result["result"]["playerHistories"]:
+    for player_history in result["playerHistories"]:
         for frame in player_history['goalTime']:
             start_time = max(frame - highlight_duration, 0)
             end_time = min(frame + highlight_duration, player_history['playTime'])
@@ -86,7 +86,7 @@ def highlight_video(ID, result, video_path):
         s3.upload_file(output_path, bucket_name, object_name)
 
         image_url = f'https://{bucket_name}.s3.{region_name}.amazonaws.com/{object_name}'
-        result["result"]["playerHistories"]["highlightUrl"] = highlight_url
+        result["playerHistories"]["highlightUrl"] = highlight_url
 
     return result
 
