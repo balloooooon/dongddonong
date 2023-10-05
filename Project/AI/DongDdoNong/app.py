@@ -40,38 +40,27 @@ def test():
     return "test"
 
 
-# @app.route('/ai/analysis/{ID}', methods=['POST'])
 @app.route('/ai/analysis/<int:ID>', methods=['POST'])
 def analyze_video(ID):
     spring_url = 'https://j9e103.p.ssafy.io:8589/game'
     try:
-        # Lambda 함수로부터 전달된 동영상 데이터 받기
-        # video_data = request.data
 
         print("analysis")
 
         video_data = request.files['file']
         print(video_data)
-        result = "되나?"
+        result = basketball.detect(video_data, ID)
 
-        # result = basketball.detect(video_data, ID)
-        # print(result)
 
-        # # 동영상 데이터를 메모리에서 읽기
-        # # nparr = np.fromstring(video_data, np.uint8)
-        # # video_frame = cv2.imdecode(nparr, cv2.IMREAD_COLOR)
-
-        # # 분석 결과 반환
         # # highlight = highlight_video(result, video_data)
-        # try:
-        #     response = requests.patch(spring_url, json=result)
+        try:
+            response = requests.patch(spring_url, json.dumps(result))
 
-        #     # 응답 확인
-        #     if response.status_code == 200:
-        #         result = response.json()
-        #         print("Analysis Result:", result['result'])
-        #     else:
-        #         print("Error:", response.status_code, response.text)
+            if response.status_code == 200:
+                result = response.json()
+                print("Analysis Result:", result['result'])
+            else:
+                print("Error:", response.status_code, response.text)
 
         # except Exception as e:
         #     print("Error:", str(e))

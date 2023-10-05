@@ -1,6 +1,4 @@
 import os
-os.environ["CUDA_DEVICE_ORDER"] = "PCI_BUS_ID"
-os.environ["CUDA_VISIBLE_DEVICES"] = "4,5"
 
 import argparse
 import mediapipe as mp
@@ -41,14 +39,22 @@ def pose(num, id):
     
     
     # 모델 주소
-    model_path = 'pose/pose_landmarker_full.task'
+    model_path = 'deepsort/pose/pose_landmarker_full.task'
     save_dir = Path(increment_path(Path('pose/runs') / 'exp', exist_ok='store_true'))
     save_dir.mkdir(parents=True, exist_ok=True)
     save_path = os.path.join(save_dir, str(num)+"_"+str(id)+".jpg")
+
+    if os.path.exists(model_path):
+    try:
+        with open(model_path, "rb") as file:
+            model = file.read()
+
+    except Exception as e:
+        print(f"오류 발생: {e}")
     
 
     # 포즈 모델 가져오기
-    base_options = python.BaseOptions(model_asset_path=model_path)
+    # base_options = python.BaseOptions(model_asset_path=model_path)
     options = vision.PoseLandmarkerOptions(
         base_options=base_options,
         output_segmentation_masks=True)

@@ -11,7 +11,7 @@ from deep_sort_pytorch.utils.parser import get_config
 from deep_sort_pytorch.deep_sort import DeepSort
 from models.experimental import attempt_load
 from utils.datasets import LoadStreams, LoadImages
-from utils.general import check_imshow, non_max_suppression, scale_coords, strip_optimizer, set_logging, increment_path
+from utils.general import check_imshow, non_max_suppression, scale_coords, set_logging, increment_path
 from utils.plots import plot_one_box
 from utils.torch_utils import select_device, time_synchronized, TracedModel
 
@@ -30,8 +30,9 @@ from PIL import Image
 import itertools
 
 import numpy as np
+import shutil
 
-model_path = '/app/deepsort/before_basketball.pt'
+model_path = 'deepsort/before_basketball.pt'
 # model_path = 'C:/Users/SSAFY/Desktop/특화PJT/S09P22E103/Project/AI/DongDdoNong/deepsort/before_basketball.pt'
 model = torch.load(model_path)
 # model.eval()
@@ -72,6 +73,31 @@ class Player:
 
 
 def detect(video, ID):
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--weights', nargs='+', type=str, default='deepsort/before_basketball.pt', help='model.pt path(s)')
+    parser.add_argument('--source', type=str, default='inference/images', help='source')  # file/folder, 0 for webcam
+    parser.add_argument('--img-size', type=int, default=640, help='inference size (pixels)')
+    parser.add_argument('--conf-thres', type=float, default=0.25, help='object confidence threshold')
+    parser.add_argument('--iou-thres', type=float, default=0.45, help='IOU threshold for NMS')
+    parser.add_argument('--device', default='cpu', help='cuda device, i.e. 0 or 0,1,2,3 or cpu')
+    parser.add_argument('--view-img', action='store_true', help='display results')
+    parser.add_argument('--save-txt', action='store_true', help='save results to *.txt')
+    parser.add_argument('--save-conf', action='store_true', help='save confidences in --save-txt labels')
+    parser.add_argument('--nosave', action='store_true', help='do not save images/videos')
+    parser.add_argument('--classes', nargs='+', type=int, help='filter by class: --class 0, or --class 0 2 3')
+    parser.add_argument('--agnostic-nms', action='store_true', help='class-agnostic NMS')
+    parser.add_argument('--augment', action='store_true', help='augmented inference')
+    parser.add_argument('--update', action='store_true', help='update all models')
+    parser.add_argument('--project', default='runs/detect', help='save results to project/name')
+    parser.add_argument('--name', default='exp', help='save results to project/name')
+    parser.add_argument('--names', type=str, default='deepsort/data/coco.names', help='*.cfg path')
+    parser.add_argument('--exist-ok', action='store_true', help='existing project/name ok, do not increment')
+    parser.add_argument('--no-trace', action='store_true', help='don`t trace model')
+    parser.add_argument('--trailslen', type=int, default=64, help='trails size (new parameter)')
+    opt = parser.parse_args()
+
+
+
     shot_try_done = False
     shot_goal_try = False
     shot_goal_try_count = 0
@@ -96,9 +122,12 @@ def detect(video, ID):
     rim_height = 0
 
     names, source, weights, view_img, save_txt, imgsz, trace = opt.names, video, opt.weights, opt.view_img, opt.save_txt, opt.img_size, not opt.no_trace
-    save_img = not opt.nosave and not source.endswith('.txt')
-    webcam = source.isnumeric() or source.endswith('.txt') or source.lower().startswith(
-        ('rtsp://', 'rtmp://', 'http://', 'https://'))
+    # save_img = not opt.nosave and not source.endswith('.txt')
+    # webcam = source.isnumeric() or source.endswith('.txt') or source.lower().startswith(
+    #     ('rtsp://', 'rtmp://', 'http://', 'https://'))
+
+    webcam = None
+    save_img = None
 
     save_dir = Path(increment_path(Path(opt.project) / opt.name, exist_ok=opt.exist_ok))
     (save_dir / 'labels' if save_txt else save_dir).mkdir(parents=True, exist_ok=True)
@@ -182,8 +211,8 @@ def detect(video, ID):
                 p, s, im0, frame = path, '', im0s, getattr(dataset, 'frame', 0)
 
             p = Path(p)
-            save_path = str(save_dir / p.name)
-            gn = torch.tensor(im0.shape)[[1, 0, 1, 0]]
+            # save_path = str(save_dir / p.name)
+            # gn = torch.tensor(im0.shape)[[1, 0, 1, 0]]
 
             if len(det):
                 det[:, :4] = scale_coords(img.shape[2:], det[:, :4], im0.shape).round()
@@ -225,6 +254,9 @@ def detect(video, ID):
                     person_data = outputs[outputs[:, -1] == 0]
                     rim_data = outputs[outputs[:, -1] == 1]
                     person_num = len(person_data)
+
+                    if len(person_data)==0:
+                        continue
 
                     for now in person_data:
                         x1, y1, x2, y2, id = now[0], now[1], now[2], now[3], now[4]
@@ -341,41 +373,41 @@ def detect(video, ID):
                             last_distance = 0
                             shot_id = -1
 
-    folder_path = "./pose/exp/"
+    # folder_path = "./pose/exp/"
 
-    object_hist = {}
+    # object_hist = {}
 
-    for object_folder in os.listdir(folder_path):
-        object_hist[object_folder] = []
-        object_folder_path = os.path.join(folder_path, object_folder)
+    # for object_folder in os.listdir(folder_path):
+    #     object_hist[object_folder] = []
+    #     object_folder_path = os.path.join(folder_path, object_folder)
 
-        image_files = [f for f in os.listdir(object_folder_path) if f.endswith(".jpg")]
+    #     image_files = [f for f in os.listdir(object_folder_path) if f.endswith(".jpg")]
 
-        image_file = image_files[int(len(image_files) / 2)]
-        image_path = os.path.join(object_folder_path, image_file)
+    #     image_file = image_files[int(len(image_files) / 2)]
+    #     image_path = os.path.join(object_folder_path, image_file)
 
-        image = cv2.imread(image_path)
+    #     image = cv2.imread(image_path)
 
-        hist = cv2.calcHist([image], [0, 1, 2], None, [8, 8, 8], [0, 256, 0, 256, 0, 256])
+    #     hist = cv2.calcHist([image], [0, 1, 2], None, [8, 8, 8], [0, 256, 0, 256, 0, 256])
 
-        object_hist[object_folder].append(hist)
+    #     object_hist[object_folder].append(hist)
 
-    object_list = list(object_hist.keys())
+    # object_list = list(object_hist.keys())
 
-    for object1, object2 in itertools.combinations(object_list, 2):
-        hist1 = object_hist[object1]
-        hist2 = object_hist[object2]
+    # for object1, object2 in itertools.combinations(object_list, 2):
+    #     hist1 = object_hist[object1]
+    #     hist2 = object_hist[object2]
 
-        similarity = cv2.compareHist(hist1[0], hist2[0], cv2.HISTCMP_CHISQR_ALT)
+    #     similarity = cv2.compareHist(hist1[0], hist2[0], cv2.HISTCMP_CHISQR_ALT)
 
-        if similarity < 180000:
-            object1 = int(object1)
-            object2 = int(object2)
-            players[object1].st2 += players[object2].st2
-            players[object1].sg2 += players[object2].sg2
-            players[object1].goalTime += players[object2].goalTime
-            players[object1].ballTime += players[object2].ballTime
-            del players[object2]
+    #     if similarity < 180000:
+    #         object1 = int(object1)
+    #         object2 = int(object2)
+    #         players[object1].st2 += players[object2].st2
+    #         players[object1].sg2 += players[object2].sg2
+    #         players[object1].goalTime += players[object2].goalTime
+    #         players[object1].ballTime += players[object2].ballTime
+    #         del players[object2]
 
     result = {
         "id": ID,
@@ -399,6 +431,9 @@ def detect(video, ID):
         result["playerHistories"].append(player_history)
 
     # 최종 결과 반환
+    folder_path = "pose/exp"
+    if os.path.exists(folder_path):
+        shutil.rmtree(folder_path)
     return result
 
 
