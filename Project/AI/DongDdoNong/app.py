@@ -86,7 +86,7 @@ def highlight_video(ID, result, video_path):
         s3.upload_file(output_path, bucket_name, object_name)
 
         image_url = f'https://{bucket_name}.s3.{region_name}.amazonaws.com/{object_name}'
-        result["playerHistories"]["highlightUrl"] = highlight_url
+        result["playerHistories"][0]["highlightUrl"] = highlight_url
 
     return result
 
@@ -116,7 +116,8 @@ def analyze_video(file_name):
         #         print("goalTime : ", goalTime)
         #         여기에 하이라이트 함수 넣으면 됨
         #         # highlight_video(goalTime, video_data)
-        result = highlight_video(ID, result, video_path)
+        # 주석 해제 해야함
+        # result = highlight_video(ID, result, video_path)
         
 
         # goalTile 지우기
