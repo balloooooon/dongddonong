@@ -135,9 +135,12 @@ def detect(video, ID):
     (save_dir / 'labels' if save_txt else save_dir).mkdir(parents=True, exist_ok=True)
 
     print(3)
-
+    print("dir : ", os.getcwd())
     cfg_deep = get_config()
+    print("3-2")
+    print("deep_sort.yaml 존재 하니? ", os.path.exists("deepsort/deep_sort_pytorch/configs/deep_sort.yaml"))
     cfg_deep.merge_from_file("deepsort/deep_sort_pytorch/configs/deep_sort.yaml")
+    print("3-3")
     deepsort = DeepSort(cfg_deep.DEEPSORT.REID_CKPT,
                         max_dist=cfg_deep.DEEPSORT.MAX_DIST, min_confidence=cfg_deep.DEEPSORT.MIN_CONFIDENCE,
                         nms_max_overlap=cfg_deep.DEEPSORT.NMS_MAX_OVERLAP,
