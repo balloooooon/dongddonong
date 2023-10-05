@@ -431,7 +431,7 @@ def detect(video, ID):
 
 
     result = {
-        "id": ID,
+        "id": int(ID),
         "playerHistories": []
     }
 

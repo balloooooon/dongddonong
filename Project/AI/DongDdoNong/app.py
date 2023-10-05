@@ -16,8 +16,8 @@ import boto3
 # from scenedetect.video_splitter import split_video_ffmpeg
 # from moviepy.editor import VideoFileClip, concatenate_videoclips, vfx, AudioFileClip, afx
 from deepsort import basketball
-# from moviepy.video.io.ffmpeg_tools import ffmpeg_extract_subclip
-# from moviepy.editor import VideoFileClip, AudioFileClip
+from moviepy.editor import VideoFileClip, AudioFileClip
+from moviepy.editor import *
 import torch
 
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
@@ -40,6 +40,57 @@ def test():
     return "test"
 
 
+bgm_path = "./temp/background_music.mp3"
+
+
+def highlight_video(ID, result, video_path):
+    global bgm_path
+
+
+
+    highlight_duration = 2  # 2초
+    clips = []
+
+    for player_history in result["result"]["playerHistories"]:
+        for frame in player_history['goalTime']:
+            start_time = max(frame - highlight_duration, 0)
+            end_time = min(frame + highlight_duration, player_history['playTime'])
+
+            # 동영상의 해당 부분 추출
+            highlight_clip = VideoFileClip(video_path).subclip(start_time, end_time)
+
+            # 하이라이트 동영상 저장
+            output_file = f'highlight_{frame}.mp4'
+            highlight_clip.write_videofile(output_file, codec='libx264')
+
+            # 생성된 하이라이트 동영상을 clips 리스트에 추가
+            clips.append(VideoFileClip(output_file))
+
+    # 배경 음악 로드
+        bgm_clip = AudioFileClip(bgm_path)
+
+        # 하이라이트 동영상들을 연결하여 하나의 동영상으로 만듭니다.
+        final_video = concatenate_videoclips(clips)
+
+        # 배경 음악 추가
+        final_video = final_video.set_audio(bgm_clip)
+        # filename = secure_filename(final_video.filename)
+        output_path = f"./temp/{ID}.mp4"
+        # 하나의 동영상으로 합친 후 저장
+        final_video.write_videofile(output_path, codec='libx264')
+        bucket_name = "dongddonong"
+        object_name = f'{ID}.mp4'
+        region_name = 'ap-northeast-2'
+        s3.put_object(Bucket=bucket_name, Key=object_name)
+        local_file_path = 'output_path'
+        s3.upload_file(output_path, bucket_name, object_name)
+
+        image_url = f'https://{bucket_name}.s3.{region_name}.amazonaws.com/{object_name}'
+        result["result"]["playerHistories"]["highlightUrl"] = highlight_url
+
+    return result
+
+
 # @app.route('/ai/analysis/<int:ID>', methods=['POST'])
 # def analyze_video(ID):
 @app.route('/ai/analysis/<file_name>', methods=['POST'])
@@ -59,12 +110,14 @@ def analyze_video(file_name):
         result = basketball.detect(video_data, ID)
         print("result : ", result)
 
-        for player_history in result["playerHistories"]:
-            if "goalTime" in player_history:
-                goalTime = player_history["goalTime"]
-                print("goalTime : ", goalTime)
-                # 여기에 하이라이트 함수 넣으면 됨
-                # highlight_video(goalTime, video_data)
+        # for player_history in result["playerHistories"]:
+        #     if "goalTime" in player_history:
+        #         goalTime = player_history["goalTime"]
+        #         print("goalTime : ", goalTime)
+        #         여기에 하이라이트 함수 넣으면 됨
+        #         # highlight_video(goalTime, video_data)
+        result = highlight_video(result, video_path, ID)
+        
 
         # goalTile 지우기
         for player_history in result["playerHistories"]:
