@@ -62,8 +62,8 @@ def analyze_video(ID):
             else:
                 print("Error:", response.status_code, response.text)
 
-        # except Exception as e:
-        #     print("Error:", str(e))
+        except Exception as e:
+            print("Error:", str(e))
 
         return jsonify({'result': result}), 200
     except Exception as e:
