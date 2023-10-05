@@ -47,7 +47,7 @@ def analyze_video(ID):
 
         print("analysis")
 
-        request_data = request.data
+        request_data = request.form['data']
         print(request_data)
 
         bucket_name = request_data.get('bucket_name')
