@@ -96,7 +96,7 @@ def detect(video, ID):
     parser.add_argument('--trailslen', type=int, default=64, help='trails size (new parameter)')
     opt = parser.parse_args()
 
-
+    print(1)
 
     shot_try_done = False
     shot_goal_try = False
@@ -121,6 +121,8 @@ def detect(video, ID):
     last_rim_data = []
     rim_height = 0
 
+    print(2)
+
     names, source, weights, view_img, save_txt, imgsz, trace = opt.names, video, opt.weights, opt.view_img, opt.save_txt, opt.img_size, not opt.no_trace
     # save_img = not opt.nosave and not source.endswith('.txt')
     # webcam = source.isnumeric() or source.endswith('.txt') or source.lower().startswith(
@@ -132,6 +134,8 @@ def detect(video, ID):
     save_dir = Path(increment_path(Path(opt.project) / opt.name, exist_ok=opt.exist_ok))
     (save_dir / 'labels' if save_txt else save_dir).mkdir(parents=True, exist_ok=True)
 
+    print(3)
+
     cfg_deep = get_config()
     cfg_deep.merge_from_file("deep_sort_pytorch/configs/deep_sort.yaml")
     deepsort = DeepSort(cfg_deep.DEEPSORT.REID_CKPT,
@@ -142,12 +146,17 @@ def detect(video, ID):
                         nn_budget=cfg_deep.DEEPSORT.NN_BUDGET,
                         use_cuda=True)
 
+    print(4)
     set_logging()
     device = select_device(opt.device)
     half = device.type != 'cpu'
 
+    print(5)
+
     model = attempt_load(weights, map_location=device)
     stride = int(model.stride.max())
+
+    print(6)
 
     if trace:
         model = TracedModel(model, device, opt.img_size)
@@ -163,8 +172,13 @@ def detect(video, ID):
     else:
         dataset = LoadImages(source, img_size=imgsz, stride=stride)
 
+    print(7)
+    
     cap = cv2.VideoCapture(source)
+    print(8)
+    print(cap)
     fps = cap.get(cv2.CAP_PROP_FPS)
+    print(9)
 
     # Get names and colors
     names = load_classes(names)
