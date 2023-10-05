@@ -45,12 +45,12 @@ def pose(num, id):
     save_path = os.path.join(save_dir, str(num)+"_"+str(id)+".jpg")
 
     if os.path.exists(model_path):
-    try:
-        with open(model_path, "rb") as file:
-            model = file.read()
+        try:
+            with open(model_path, "rb") as file:
+                model = file.read()
 
-    except Exception as e:
-        print(f"오류 발생: {e}")
+        except Exception as e:
+            print(f"오류 발생: {e}")
     
 
     # 포즈 모델 가져오기
