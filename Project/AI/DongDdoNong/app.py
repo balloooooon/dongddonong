@@ -50,44 +50,57 @@ def highlight_video(ID, result, video_path):
 
     highlight_duration = 2  # 2초
     clips = []
-
+    
     for player_history in result["playerHistories"]:
         for frame in player_history['goalTime']:
+            print(11)
             start_time = max(frame - highlight_duration, 0)
             end_time = min(frame + highlight_duration, player_history['playTime'])
 
+            print("start_time : ", start_time)
+            print("end_time : ", end_time)
+
             # 동영상의 해당 부분 추출
             highlight_clip = VideoFileClip(video_path).subclip(start_time, end_time)
+            print(12)
 
             # 하이라이트 동영상 저장
             output_file = f'highlight_{frame}.mp4'
             highlight_clip.write_videofile(output_file, codec='libx264')
+            print(13)
 
             # 생성된 하이라이트 동영상을 clips 리스트에 추가
             clips.append(VideoFileClip(output_file))
+            print(14)
 
     # 배경 음악 로드
         bgm_clip = AudioFileClip(bgm_path)
+        print(15)
 
         # 하이라이트 동영상들을 연결하여 하나의 동영상으로 만듭니다.
         final_video = concatenate_videoclips(clips)
+        print(16)
 
         # 배경 음악 추가
         final_video = final_video.set_audio(bgm_clip)
+        print(17)
         # filename = secure_filename(final_video.filename)
         output_path = f"./temp/{ID}.mp4"
         # 하나의 동영상으로 합친 후 저장
+        print(18)
         final_video.write_videofile(output_path, codec='libx264')
+        print(19)
         bucket_name = "dongddonong"
         object_name = f'{ID}.mp4'
         region_name = 'ap-northeast-2'
         s3.put_object(Bucket=bucket_name, Key=object_name)
+        print(20)
         local_file_path = 'output_path'
         s3.upload_file(output_path, bucket_name, object_name)
-
+        print(21)
         highlight_url = f'https://{bucket_name}.s3.{region_name}.amazonaws.com/{object_name}'
         player_history["highlightUrl"] = highlight_url
-
+        print(22)
     return result
 
 
