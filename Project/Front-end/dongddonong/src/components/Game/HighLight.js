@@ -36,7 +36,7 @@ const HighLight = (props) => {
       />
       <ReactPlayer
         // "https://dongddonong.s3.ap-northeast-2.amazonaws.com/1266.mp4"
-        url="https://player.vimeo.com/external/480437160.sd.mp4?s=8cc88c0030d7e674a75656c8af76a0582fbc438b&profile_id=165&oauth2_token_id=57447761"
+        url="https://www.youtube.com/shorts/A0qQEU0W3jE"
         controls
         // ref={videoRef}
         width={"100%"}
