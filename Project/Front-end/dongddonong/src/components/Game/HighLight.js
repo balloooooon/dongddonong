@@ -43,7 +43,7 @@ const HighLight = (props) => {
         // ref={videoRef}
         width={"100%"}
         height={"100%"}
-        style={{ objectFit: "cover" }}
+        style={{ objectFit: "cover", minWidth: "300px" }}
       ></ReactPlayer>
 
       <Toast toastOpen={toastOpen}>링크를 클립보드에 복사했습니다.</Toast>
