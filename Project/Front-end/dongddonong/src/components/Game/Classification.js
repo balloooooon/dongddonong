@@ -1,5 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 
+import first from "../../assets/0.jpg";
+import second from "../../assets/1.jpg";
 import { UserMapping } from "../../api/userMapping";
 import Modal from "../Modal/Modal";
 import "./Classification.css";
@@ -9,6 +11,7 @@ const Classification = ({ playerHistories, userId, onClose }) => {
   const [innerWidth, setInnerWidth] = useState(window.innerWidth);
   const [initialized, setInitialized] = useState(false);
   const [completeClassify, setCompleteClassify] = useState(true);
+  let index = 0;
 
   let current =
     frameRef.current && frameRef.current.querySelector(".card:last-child");
@@ -43,7 +46,9 @@ const Classification = ({ playerHistories, userId, onClose }) => {
     newCard.key = data.userId;
     newCard.className = "card";
 
-    newCard.style.backgroundImage = `url("https://dongddonong.s3.ap-northeast-2.amazonaws.com/thumbnail/b1c9939a-f342-4144-8bc3-9849bb4e05bd_89220725-b1bc-48f3-9d88-c82b8c48e855.png")`;
+    if (index++ === 0) newCard.style.backgroundImage = `url(${first})`;
+    else newCard.style.backgroundImage = `url(${second})`;
+
     // newCard.style.backgroundImage = `url(${data.diffProfileImg})`;
     newCard.innerHTML = `
     <div class="mx-auto w-full text-center mt-4">본인을 선택 하면 기록이 연동돼요</div>
