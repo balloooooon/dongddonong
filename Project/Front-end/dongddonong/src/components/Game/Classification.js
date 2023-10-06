@@ -44,6 +44,7 @@ const Classification = ({ playerHistories, userId, onClose }) => {
     newCard.className = "card";
 
     newCard.style.backgroundImage = `url("https://dongddonong.s3.ap-northeast-2.amazonaws.com/thumbnail/b1c9939a-f342-4144-8bc3-9849bb4e05bd_89220725-b1bc-48f3-9d88-c82b8c48e855.png")`;
+    // newCard.style.backgroundImage = `url(${data.diffProfileImg})`;
     newCard.innerHTML = `
     <div class="mx-auto w-full text-center mt-4">본인을 선택 하면 기록이 연동돼요</div>
     ${
