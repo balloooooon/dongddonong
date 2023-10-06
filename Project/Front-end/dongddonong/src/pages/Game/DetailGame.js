@@ -96,7 +96,9 @@ const DetailGame = () => {
           <div className="flex overflow-x-auto gap-4 mb-4">
             {playerHistories.length &&
               playerHistories.map((e) => {
-                <HighLight key={e.id} videoURL={e.highlightUrl}></HighLight>;
+                return (
+                  <HighLight key={e.id} videoURL={e.highlightUrl}></HighLight>
+                );
               })}
           </div>
         </div>
