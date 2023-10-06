@@ -97,7 +97,6 @@ const DetailGame = () => {
             {playerHistories.length &&
               playerHistories.map((e) => {
                 <HighLight key={e.id} videoURL={e.highlightUrl}></HighLight>;
-                console.log(playerHistories);
               })}
           </div>
         </div>

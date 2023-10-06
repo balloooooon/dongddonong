@@ -8,16 +8,16 @@ import styles from "./HightLight.module.css";
 const HighLight = (props) => {
   console.log("동영상 재생");
   const [toastOpen, SetToastOpen] = useState(false);
-  const [videoURL, SetVideoURL] = useState("");
-  const videoRef = useRef();
+  // const [videoURL, SetVideoURL] = useState("");
+  // const videoRef = useRef();
 
   const ToastCloseHandler = () => {
     SetToastOpen(false);
   };
 
-  useEffect(() => {
-    SetVideoURL(videoRef.current.props.url);
-  }, [videoRef]);
+  // useEffect(() => {
+  //   SetVideoURL(videoRef.current.props.url);
+  // }, [videoRef]);
 
   return (
     <div className="relative rounded-3xl">
@@ -26,7 +26,7 @@ const HighLight = (props) => {
         src={share}
         alt="share"
         onClick={() => {
-          window.navigator.clipboard.writeText(videoURL);
+          window.navigator.clipboard.writeText(props.videoURL);
           SetToastOpen(true);
 
           setTimeout(() => {
@@ -36,9 +36,9 @@ const HighLight = (props) => {
       />
       <ReactPlayer
         // "https://dongddonong.s3.ap-northeast-2.amazonaws.com/1266.mp4"
-        url="https://www.youtube.com/shorts/A0qQEU0W3jE"
+        url="https://player.vimeo.com/external/480437160.sd.mp4?s=8cc88c0030d7e674a75656c8af76a0582fbc438b&profile_id=165&oauth2_token_id=57447761"
         controls
-        ref={videoRef}
+        // ref={videoRef}
         width={"100%"}
       ></ReactPlayer>
 
