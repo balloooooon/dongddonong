@@ -6,7 +6,7 @@ import share from "../../assets/icon/share.png";
 import styles from "./HightLight.module.css";
 
 const HighLight = (props) => {
-  console.log("동영상 재생");
+  console.log(props);
   const [toastOpen, SetToastOpen] = useState(false);
   // const [videoURL, SetVideoURL] = useState("");
   // const videoRef = useRef();
