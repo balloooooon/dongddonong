@@ -200,7 +200,7 @@ def detect(video, ID):
 
     for idx, (path, img, im0s, vid_cap) in enumerate(dataset):
         temp = copy.deepcopy(im0s)
-
+        print(11)
         img = torch.from_numpy(img).to(device)
         img = img.half() if half else img.float()
         img /= 255.0
@@ -208,7 +208,7 @@ def detect(video, ID):
             img = img.unsqueeze(0)
 
         image_height, image_width, _ = im0s.shape
-
+        print(12)
         if device.type != 'cpu' and (
                 old_img_b != img.shape[0] or old_img_h != img.shape[2] or old_img_w != img.shape[3]):
             old_img_b = img.shape[0]
@@ -223,7 +223,7 @@ def detect(video, ID):
         t2 = time_synchronized()
         pred = non_max_suppression(pred, opt.conf_thres, opt.iou_thres, classes=opt.classes, agnostic=opt.agnostic_nms)
         t3 = time_synchronized()
-
+        print(13)
         for i, det in enumerate(pred):
             if webcam:
                 p, s, im0, frame = path[i], '%g: ' % i, im0s[i].copy(), dataset.count
@@ -303,6 +303,7 @@ def detect(video, ID):
 
                     close_person, distance = close_person_find(person_data, ball_data)
 
+                    print(15)
                     x1, y1, x2, y2, close_id = person_data[close_person][0], person_data[close_person][1], \
                         person_data[close_person][2], person_data[close_person][3], person_data[close_person][4]
                     person_width = (x2 - x1) / 2
@@ -325,7 +326,7 @@ def detect(video, ID):
                     else:
                         if distance < ball_width * 2 + person_width:
                             players[close_id].ball_time_plus()
-
+                    print(16)
                     if not shot_try_done and shot_goal_done and shot_id != -1:
                         if shot_count < 3:
                             if distance >= last_distance:
@@ -553,7 +554,7 @@ def calculate_distance(person_bbox, ball_bbox):
 
     # 유클리드 거리 계산
     distance = math.sqrt(distance_x ** 2 + distance_y ** 2)
-
+    print("distance : ", distance)
     return distance
 
 
