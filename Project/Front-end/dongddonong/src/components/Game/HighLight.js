@@ -1,6 +1,7 @@
 import { useState, useRef, useEffect } from "react";
 import ReactPlayer from "react-player";
 
+import video from "../../assets/1266.mp4";
 import Toast from "../../components/Modal/Toast";
 import share from "../../assets/icon/share.png";
 import styles from "./HightLight.module.css";
@@ -36,7 +37,8 @@ const HighLight = (props) => {
       />
       <ReactPlayer
         // "https://dongddonong.s3.ap-northeast-2.amazonaws.com/1266.mp4"
-        url="https://www.youtube.com/embed/Ze306gxl-g4"
+        // url="https://www.youtube.com/embed/Ze306gxl-g4"
+        url={video}
         controls
         // ref={videoRef}
         width={"100%"}
