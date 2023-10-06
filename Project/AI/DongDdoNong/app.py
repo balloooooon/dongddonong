@@ -41,7 +41,7 @@ def test():
 
 
 bgm_path = "./temp/background_music.mp3"
-
+prev_game_id = ""
 
 def highlight_video(ID, result, video_path):
     global bgm_path
@@ -110,57 +110,65 @@ def highlight_video(ID, result, video_path):
 @app.route('/ai/analysis/<file_name>', methods=['POST'])
 def analyze_video(file_name):
     spring_url = 'https://j9e103.p.ssafy.io:8589/game'
-    try:
 
-        print("analysis")
+    ID = file_name.split('_')[0]
 
-        bucket_name = "dongddonong"
-        object_key = "video/" + file_name
-        video_path = f"./temp/{file_name}"
-        s3.download_file(bucket_name, object_key, video_path)
-        ID = file_name.split('_')[0]
-
-        video_data = open(video_path, 'r', encoding='UTF-8')
-        result = basketball.detect(video_data, ID)
-        print("result : ", result)
-
-        # for player_history in result["playerHistories"]:
-        #     if "goalTime" in player_history:
-        #         goalTime = player_history["goalTime"]
-        #         print("goalTime : ", goalTime)
-        #         여기에 하이라이트 함수 넣으면 됨
-        #         # highlight_video(goalTime, video_data)
-        # 주석 해제 해야함
-        result = highlight_video(ID, result, video_path)
-        
-
-        # goalTile 지우기
-        for player_history in result["playerHistories"]:
-            del player_history["goalTime"]
-
-        # print("json.dumps(result) : ", json.dumps(result))
-
-        print(result)
-        # highlight = highlight_video(result, video_data)
-        print("spring_url : ", spring_url)
+    global prev_game_id
+    if prev_game_id!=ID:
+        prev_game_id = ID
         try:
-            headers = {'Content-type': 'application/json; charset=utf-8'}
-            response = requests.patch(spring_url, headers=headers, data=json.dumps(result))
 
-            if response.ok:
-                try:
-                    result = response.json()
-                    print("Analysis Result:", result['result'])
-                except json.JSONDecodeError as json_error:
-                    print("Error decoding JSON response:", json_error)
-            else:
-                print("Error:", response.status_code, response.text)
+            print("analysis")
 
-        except requests.exceptions.RequestException as request_error:
-            print("Request error:", request_error)
+            bucket_name = "dongddonong"
+            object_key = "video/" + file_name
+            video_path = f"./temp/{file_name}"
+            s3.download_file(bucket_name, object_key, video_path)
+            
+
+            video_data = open(video_path, 'r', encoding='UTF-8')
+            result = basketball.detect(video_data, ID)
+            print("result : ", result)
+
+            # for player_history in result["playerHistories"]:
+            #     if "goalTime" in player_history:
+            #         goalTime = player_history["goalTime"]
+            #         print("goalTime : ", goalTime)
+            #         여기에 하이라이트 함수 넣으면 됨
+            #         # highlight_video(goalTime, video_data)
+            # 주석 해제 해야함
+            result = highlight_video(ID, result, video_path)
+            
+
+            # goalTile 지우기
+            for player_history in result["playerHistories"]:
+                del player_history["goalTime"]
+
+            # print("json.dumps(result) : ", json.dumps(result))
+
+            print(result)
+            # highlight = highlight_video(result, video_data)
+            print("spring_url : ", spring_url)
+            try:
+                headers = {'Content-type': 'application/json; charset=utf-8'}
+                response = requests.patch(spring_url, headers=headers, data=json.dumps(result))
+
+                if response.ok:
+                    try:
+                        result = response.json()
+                        print("Analysis Result:", result['result'])
+                    except json.JSONDecodeError as json_error:
+                        print("Error decoding JSON response:", json_error)
+                else:
+                    print("Error:", response.status_code, response.text)
+
+            except requests.exceptions.RequestException as request_error:
+                print("Request error:", request_error)
+            except Exception as e:
+                print("Error:", e)
+
+            return jsonify({'result': result}), 200
         except Exception as e:
-            print("Error:", e)
-
-        return jsonify({'result': result}), 200
-    except Exception as e:
-        return jsonify({'error': str(e)}), 500
+            return jsonify({'error': str(e)}), 500
+    else:
+        return jsonify({'result': "이미 등록되어있음"}), 200

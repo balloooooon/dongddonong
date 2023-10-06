@@ -555,7 +555,7 @@ def calculate_distance(person_bbox, ball_bbox):
 
     # 유클리드 거리 계산
     distance = math.sqrt(distance_x ** 2 + distance_y ** 2)
-    print("distance : ", distance)
+    # print("distance : ", distance)
     return distance
 
 
