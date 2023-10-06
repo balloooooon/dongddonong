@@ -14,6 +14,7 @@ from utils.datasets import LoadStreams, LoadImages
 from utils.general import check_imshow, non_max_suppression, scale_coords, set_logging, increment_path
 from utils.plots import plot_one_box
 from utils.torch_utils import select_device, time_synchronized, TracedModel
+import math
 
 import argparse
 import time
